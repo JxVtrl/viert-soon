@@ -17,7 +17,36 @@ export default function Home() {
   const [idx, setIdx] = useState<number>(0);
   const { isDesktop } = useAppContext();
 
-  const changeImage = useCallback(() => {
+  const fadeOutAnimation = useCallback(() => {
+    // Realize a animação de fade
+    gsap.fromTo(
+      '.img',
+      {
+        opacity: 1, // Comece com opacidade 1
+      },
+      {
+        duration: 1.3, // Duração do fade
+        opacity: 0, // Animação para opacidade 0
+      },
+    );
+  }, []);
+
+  const fadeInAnimation = useCallback(() => {
+    // Realize a animação de fade
+    gsap.fromTo(
+      '.img',
+      {
+        opacity: 0, // Comece com opacidade 0
+      },
+      {
+        duration: 1.3, // Duração do fade
+        opacity: 1, // Animação para opacidade 1
+      },
+    );
+  }, []);
+
+
+  const changeImageAnimation = useCallback(() => {
     // Realize a animação de fade
     gsap.fromTo(
       '.img',
@@ -32,8 +61,10 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    changeImage();
-  }, [changeImage, idx]);
+    fadeOutAnimation()
+    changeImageAnimation();
+    fadeInAnimation();
+  }, [changeImageAnimation, idx, fadeOutAnimation, fadeInAnimation, isDesktop]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -97,12 +128,7 @@ export default function Home() {
           <>
             <div className="flex-1 relative h-screen">
               <Image
-                className={`h-full ${
-                  IMAGES[idx].src === '/assets/gray.jpeg'
-                    ? 'bg-bottom'
-                    : 'bg-center'
-                } object-cover opacity-[0] bg-cover brightness-50 img`}
-                loading="eager"
+                className={`h-full object-cover opacity-[0] bg-cover brightness-50 img`}
                 src={IMAGES[idx].src}
                 layout="fill"
                 alt={IMAGES[idx].alt}
@@ -111,7 +137,6 @@ export default function Home() {
             <div className="flex-1 relative h-screen">
               <Image
                 className="h-full opacity-[0] brightness-50 object-cover bg-center img bg-cover"
-                loading="eager"
                 layout="fill"
                 src={IMAGES[idx + 1].src}
                 alt={IMAGES[idx + 1].alt}
