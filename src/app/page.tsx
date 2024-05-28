@@ -16,44 +16,56 @@ export default function Home() {
   const [isIphone, setIsIphone] = useState(false);
   const [idx, setIdx] = useState<number>(0);
   const { isDesktop } = useAppContext();
-  const [isLoaded, setIsLoaded] = useState(false);
+
 
   const fadeOutAnimation = useCallback(() => {
+    // Realize a animação de fade
     gsap.fromTo(
       '.img',
       {
-        opacity: 1,
+        opacity: 1, // Comece com opacidade 1
       },
       {
-        duration: 1.3,
-        opacity: 0,
+        duration: 1.3, // Duração do fade
+        opacity: 0, // Animação para opacidade 0
       },
     );
   }, []);
 
   const fadeInAnimation = useCallback(() => {
+    // Realize a animação de fade
     gsap.fromTo(
       '.img',
       {
-        opacity: 0,
+        opacity: 0, // Comece com opacidade 0
       },
       {
-        duration: 1.3,
-        opacity: 1,
+        duration: 1.3, // Duração do fade
+        opacity: 1, // Animação para opacidade 1
       },
     );
   }, []);
 
-  const handleImageLoad = useCallback(() => {
-    setIsLoaded(true);
-    fadeInAnimation();
-  }, [fadeInAnimation]);
+
+  const changeImageAnimation = useCallback(() => {
+    // Realize a animação de fade
+    gsap.fromTo(
+      '.img',
+      {
+        opacity: 0, // Comece com opacidade 0
+      },
+      {
+        duration: 1.3, // Duração do fade
+        opacity: 1, // Animação para opacidade 1
+      },
+    );
+  }, []);
 
   useEffect(() => {
-    if (isLoaded) {
-      fadeOutAnimation();
-    }
-  }, [fadeOutAnimation, isLoaded]);
+    fadeOutAnimation()
+    changeImageAnimation();
+    fadeInAnimation();
+  }, [changeImageAnimation, idx, fadeOutAnimation, fadeInAnimation, isDesktop]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -70,7 +82,6 @@ export default function Home() {
           return prevIdx + 1;
         }
       });
-      setIsLoaded(false); // Reset the loaded state for the next image
     }, 5000);
 
     return () => clearInterval(interval);
@@ -109,7 +120,9 @@ export default function Home() {
 
   return (
     <main
-      className={`w-screen h-screen text-white relative flex items-center justify-center overflow-hidden`}
+      className={`w-screen h-screen text-white relative flex items-center justify-center
+        overflow-hidden
+      `}
     >
       <RenderConditional
         desktop={
@@ -120,7 +133,6 @@ export default function Home() {
                 src={IMAGES[idx].src}
                 layout="fill"
                 alt={IMAGES[idx].alt}
-                onLoadingComplete={handleImageLoad}
               />
             </div>
             <div className="flex-1 relative h-screen">
@@ -129,7 +141,6 @@ export default function Home() {
                 layout="fill"
                 src={IMAGES[idx + 1].src}
                 alt={IMAGES[idx + 1].alt}
-                onLoadingComplete={handleImageLoad}
               />
             </div>
           </>
@@ -137,18 +148,17 @@ export default function Home() {
         mobile={
           <div className="w-full h-full flex items-center justify-center">
             <Image
-              className="img opacity-[0] object-cover bg-cover brightness-50"
+              className="img opacity-[0] object-cover bg-cover brightness-50 "
               layout="fill"
               src={IMAGES[idx].src}
               alt={IMAGES[idx].alt}
-              onLoadingComplete={handleImageLoad}
             />
           </div>
         }
       />
 
       <div
-        className={`absolute z-50 flex bottom-5 flex-col justify-between py-10 gap-[48px]`}
+        className={`absolute z-50 flex  bottom-5 flex-col justify-between py-10 gap-[48px]`}
         style={{
           paddingBottom: isDesktop ? undefined : isIphone ? '120px' : '64px',
         }}
@@ -163,7 +173,7 @@ export default function Home() {
           <Image layout="fill" src="/assets/brand/logo.png" alt="Logo" />
         </div>
         <p
-          className="tracking-[6px] md:tracking-[11px] text-center font-baskervville uppercase"
+          className="tracking-[6px] md:tracking-[11px] text-center font-baskervville uppercase "
           style={{
             fontSize: isDesktop ? '1.5rem' : '0.92rem',
             fontWeight: 100,
@@ -177,7 +187,7 @@ export default function Home() {
             isDesktop ? '120px' : '64px'
           }]`}
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 ">
             <h2 className="font-baskervville tracking-[4px]">
               {mainData.contact.title}
             </h2>
