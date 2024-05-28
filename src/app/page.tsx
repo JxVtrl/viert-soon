@@ -18,54 +18,25 @@ export default function Home() {
   const { isDesktop } = useAppContext();
 
 
-  const fadeOutAnimation = useCallback(() => {
+  const fadeAnimation = useCallback(() => {
     // Realize a animação de fade
     gsap.fromTo(
       '.img',
       {
-        opacity: 1, // Comece com opacidade 1
+        opacity: 0,
       },
       {
-        duration: 1.3, // Duração do fade
-        opacity: 0, // Animação para opacidade 0
-      },
+        opacity: 1,
+        duration: 1,
+        ease: 'power1.inOut',
+      }
     );
   }, []);
 
-  const fadeInAnimation = useCallback(() => {
-    // Realize a animação de fade
-    gsap.fromTo(
-      '.img',
-      {
-        opacity: 0, // Comece com opacidade 0
-      },
-      {
-        duration: 1.3, // Duração do fade
-        opacity: 1, // Animação para opacidade 1
-      },
-    );
-  }, []);
-
-
-  const changeImageAnimation = useCallback(() => {
-    // Realize a animação de fade
-    gsap.fromTo(
-      '.img',
-      {
-        opacity: 0, // Comece com opacidade 0
-      },
-      {
-        duration: 1.3, // Duração do fade
-        opacity: 1, // Animação para opacidade 1
-      },
-    );
-  }, []);
 
   useEffect(() => {
-    fadeOutAnimation()
-    changeImageAnimation();
-    fadeInAnimation();
-  }, [changeImageAnimation, idx, fadeOutAnimation, fadeInAnimation, isDesktop]);
+    fadeAnimation();
+  }, [idx,fadeAnimation, isDesktop]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -100,7 +71,6 @@ export default function Home() {
 
   useEffect(() => {
     const isIph = verifyIfIsIphone();
-    console.log('isIph', isIph);
     setIsIphone(isIph);
   }, []);
 
